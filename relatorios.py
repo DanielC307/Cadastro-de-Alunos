@@ -1,89 +1,79 @@
-# relatorios.py
-# Gera os relatórios do sistema acadêmico.
+from notas import calcular_media, matriz_notas
+from ordenacao import ordenar_por_nota
 
 
-def relatorio_geral(alunos, matriz_notas):
-    """
-    Exibe um relatório completo com todos os alunos, suas médias e situação.
+def relatorio_geral(alunos, mtr_notas):
+    print("=== RELATÓRIO GERAL ===")
 
-    O que fazer:
-        1. Imprimir um cabeçalho formatado (ex: "=== RELATÓRIO GERAL ===").
-        2. Verificar se há alunos cadastrados; se não, avisar e retornar.
-        3. Usar um laço for com enumerate(alunos) para percorrer a lista.
-           O enumerate fornece índice (i) e o dicionário do aluno.
-        4. Para cada aluno:
-           a. Exibir matrícula e nome.
-           b. Exibir cada nota (acessando matriz_notas[i]).
-           c. Calcular e exibir a média (importe de notas.py).
-           d. Exibir situação: "APROVADO" se média >= 6, senão "REPROVADO".
-        5. Ao final, imprimir um rodapé com o total de alunos.
+    if not alunos:
+        print("Nenhum aluno cadastrado.")
+        return
 
-    Parâmetros:
-        alunos       (list): Lista de dicionários de alunos.
-        matriz_notas (list): Matriz com as notas.
+    for i, aluno in enumerate(alunos):
+        notas = mtr_notas[i]
+        media = calcular_media(i)
+        situacao = "APROVADO" if media >= 6.0 else "REPROVADO"
 
-    Retorno:
-        None
-    """
-    pass
+        print(f"Matrícula: {aluno['matricula']} | Nome: {aluno['nome']}")
+        print(f"Notas: {notas} | Média: {media:.1f} | Situação: {situacao}")
+        print("-" * 30)
+
+    print(f"Total de alunos: {len(alunos)}")
 
 
-def relatorio_aprovados(alunos, matriz_notas):
-    """
-    Exibe apenas os alunos com média >= 6.0 (aprovados).
+def relatorio_aprovados(alunos, mtr_notas):
+    print("=== ALUNOS APROVADOS ===")
 
-    O que fazer:
-        1. Imprimir cabeçalho "=== ALUNOS APROVADOS ===".
-        2. Criar um contador de aprovados (começa em 0).
-        3. Percorrer os alunos com enumerate.
-        4. Para cada aluno, calcular a média.
-           Se média >= 6.0, exibir os dados e incrementar o contador.
-        5. Ao final, exibir o total de aprovados.
-           Se nenhum foi aprovado, exibir mensagem adequada.
+    contador_aprovados = 0
+    for i, aluno in enumerate(alunos):
+        media = calcular_media(i)
+        if media >= 6.0:
+            print(
+                f"Matrícula: {aluno['matricula']} | Nome: {aluno['nome']} | Média: {media:.1f}"
+            )
+            contador_aprovados += 1
 
-    Parâmetros:
-        alunos       (list): Lista de dicionários de alunos.
-        matriz_notas (list): Matriz com as notas.
-
-    Retorno:
-        None
-    """
-    pass
+    if contador_aprovados == 0:
+        print("Nenhum aluno foi aprovado.")
+    else:
+        print(f"Total de aprovados: {contador_aprovados}")
 
 
-def relatorio_reprovados(alunos, matriz_notas):
-    """
-    Exibe apenas os alunos com média < 6.0 (reprovados).
+def relatorio_reprovados(alunos, mtr_notas):
+    print("=== ALUNOS REPROVADOS ===")
 
-    O que fazer:
-        Mesma lógica de relatorio_aprovados(), mas filtrando média < 6.0.
+    contador_reprovados = 0
+    for i, aluno in enumerate(alunos):
+        media = calcular_media(i)
+        if media < 6.0:
+            print(
+                f"Matrícula: {aluno['matricula']} | Nome: {aluno['nome']} | Média: {media:.1f}"
+            )
+            contador_reprovados += 1
 
-    Parâmetros:
-        alunos       (list): Lista de dicionários de alunos.
-        matriz_notas (list): Matriz com as notas.
-
-    Retorno:
-        None
-    """
-    pass
+    if contador_reprovados == 0:
+        print("Nenhum aluno foi reprovado.")
+    else:
+        print(f"Total de reprovados: {contador_reprovados}")
 
 
-def relatorio_ranking(alunos, matriz_notas):
-    """
-    Exibe os alunos ordenados do maior para o menor desempenho (ranking).
+def relatorio_ranking(alunos, mtr_notas):
+    print("=== RANKING DE DESEMPENHO ===")
 
-    O que fazer:
-        1. Imprimir cabeçalho "=== RANKING DE DESEMPENHO ===".
-        2. Chamar ordenar_por_nota() de ordenacao.py para obter lista ordenada.
-        3. Percorrer a lista ordenada e exibir posição, nome e média.
-           Ex: "1º - Ana Silva - Média: 9.2"
-        4. Use enumerate(lista, start=1) para começar a contagem em 1.
+    if not alunos:
+        print("Nenhum aluno cadastrado para o ranking.")
+        return
 
-    Parâmetros:
-        alunos       (list): Lista de dicionários de alunos.
-        matriz_notas (list): Matriz com as notas.
+    alunos_com_media = []
+    for i, aluno in enumerate(alunos):
+        media = calcular_media(i)
+        alunos_com_media.append((media, aluno))
 
-    Retorno:
-        None
-    """
-    pass
+    n = len(alunos_com_media)
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if alunos_com_media[j][0] < alunos_com_media[j + 1][0]:
+                alunos_com_media[j], alunos_com_media[j + 1] = alunos_com_media[j + 1], alunos_com_media[j]
+
+    for posicao, (media, aluno) in enumerate(alunos_com_media, start=1):
+        print(f"{posicao}º - {aluno['nome']} - Média: {media:.1f}")
