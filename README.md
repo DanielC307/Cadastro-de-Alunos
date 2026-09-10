@@ -1,4 +1,4 @@
-# Sistema de Cadastro Acadêmico — Algoritmos de Busca e Ordenação
+# Sistema de Cadastro Acadêmico: Algoritmos de Busca e Ordenação
 
 Aplicação de linha de comando em Python para cadastro de alunos, lançamento de notas e emissão de relatórios acadêmicos. O foco do projeto é a **implementação manual de algoritmos de busca e ordenação**, sem recorrer aos métodos prontos da linguagem.
 
